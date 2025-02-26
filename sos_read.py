@@ -23,9 +23,13 @@ def download_sos(bucket_key, sos_filepath):
     sos_filepath: str - Full path to download SoS file to locally
     """
 
-    bucket = bucket_key.split("/")[0]
+    bucket_key_split = bucket_key.split('/')
+    bucket = bucket_key_split[0]
     sos_filename = pathlib.Path(sos_filepath).name
-    key = f"{'/'.join(bucket_key.split('/')[1:])}/{sos_filename}"
+    if len(bucket_key_split) == 1:
+        key = sos_filename
+    else:
+        key = f"{'/'.join(bucket_key_split[1:])}/{sos_filename}"
 
     s3 = boto3.client("s3")
     try:
